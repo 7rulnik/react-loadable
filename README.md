@@ -2,10 +2,14 @@
 
 > A higher order component for loading components with dynamic imports.
 
+## ⚠️⚠️⚠️ Warning ⚠️⚠️⚠️
+
+It's a fork of react-loadable that works with webpack@4! You should not use it if you don't understand what is going on. You can track [original PR](https://github.com/jamiebuilds/react-loadable/pull/110) with this update.
+
 ## Install
 
 ```sh
-yarn add react-loadable
+yarn add @7rulnik/react-loadable
 ```
 
 ## Example
