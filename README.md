@@ -41,16 +41,26 @@ export default class App extends React.Component {
 
 ## Users
 
+- [Analog.Cafe](https://www.analog.cafe)
+- [Appbase.io](https://github.com/appbaseio/reactivesearch)
 - [Atlassian](https://www.atlassian.com/)
 - [Cloudflare](https://www.cloudflare.com)
 - [Curio](https://www.curio.org)
+- [Dollar Shave Club](https://github.com/dollarshaveclub)
+- [Dresez](https://dresez.pk/)
 - [Flyhomes](https://flyhomes.com)
+- [Gogo](https://gogoair.com)
+- [Gofore](https://gofore.com/en/home/)
 - [MediaTek MCS-Lite](https://github.com/MCS-Lite)
+- [Officepulse](https://www.officepulse.in/)
+- [Plottu](https://public.plottu.com)
+- [Render](https://render.com)
 - [Snipit](https://snipit.io)
 - [Spectrum.chat](https://spectrum.chat)
 - [Talentpair](https://talentpair.com)
 - [Tinder](https://tinder.com/)
 - [Unsplash](https://unsplash.com/)
+- [Wave](https://waveapps.com/)
 
 > _If your company or project is using React Loadable, please open a PR and add
 > yourself to this list (in alphabetical order please)_
@@ -153,7 +163,7 @@ class MyComponent extends React.Component {
 
   componentWillMount() {
     import('./components/Bar').then(Bar => {
-      this.setState({ Bar });
+      this.setState({ Bar: Bar.default });
     });
   }
 
@@ -223,13 +233,13 @@ couple different props.
 #### Loading error states
 
 When your [`loader`](optsloader) fails, your [loading component](#loadingcomponent)
-will receive an [`error`](propserror) prop which will be `true` (otherwise it
-will be `false`).
+will receive an [`error`](propserror) prop which will be an `Error` object (otherwise it
+will be `null`).
 
 ```js
 function Loading(props) {
   if (props.error) {
-    return <div>Error!</div>;
+    return <div>Error! <button onClick={ props.retry }>Retry</button></div>;
   } else {
     return <div>Loading...</div>;
   }
@@ -252,7 +262,7 @@ which will only be true once the component has taken longer to load than a set
 ```js
 function Loading(props) {
   if (props.error) {
-    return <div>Error!</div>;
+    return <div>Error! <button onClick={ props.retry }>Retry</button></div>;
   } else if (props.pastDelay) {
     return <div>Loading...</div>;
   } else {
@@ -285,9 +295,9 @@ The [loading component](#loadingcomponent) will receive a
 ```js
 function Loading(props) {
   if (props.error) {
-    return <div>Error!</div>;
+    return <div>Error! <button onClick={ props.retry }>Retry</button></div>;
   } else if (props.timedOut) {
-    return <div>Taking a long time...</div>;
+    return <div>Taking a long time... <button onClick={ props.retry }>Retry</button></div>;
   } else if (props.pastDelay) {
     return <div>Loading...</div>;
   } else {
@@ -596,6 +606,8 @@ export default {
 }
 ```
 
+_Notice: As of Webpack 4 the CommonsChunkPlugin has been removed and the manifest doesn't need to be extracted anymore._
+
 ```js
 let bundles = getBundles(stats, modules);
 
@@ -608,6 +620,9 @@ res.send(`
       <script src="/dist/manifest.js"></script>
       ${bundles.map(bundle => {
         return `<script src="/dist/${bundle.file}"></script>`
+        // alternatively if you are using publicPath option in webpack config
+        // you can use the publicPath value from bundle, e.g:
+        // return `<script src="${bundle.publicPath}"></script>`
       }).join('\n')}
       <script src="/dist/main.js"></script>
     </body>
@@ -845,10 +860,10 @@ This is the component you pass to [`opts.loading`](#optsloading).
 function LoadingComponent(props) {
   if (props.error) {
     // When the loader has errored
-    return <div>Error!</div>;
+    return <div>Error! <button onClick={ props.retry }>Retry</button></div>;
   } else if (props.timedOut) {
     // When the loader has taken longer than the timeout
-    return <div>Taking a long time...</div>;
+    return <div>Taking a long time... <button onClick={ props.retry }>Retry</button></div>;
   } else if (props.pastDelay) {
     // When the loader has taken longer than the delay
     return <div>Loading...</div>;
@@ -858,7 +873,7 @@ function LoadingComponent(props) {
   }
 }
 
-Loading({
+Loadable({
   loading: LoadingComponent,
 });
 ```
@@ -867,13 +882,31 @@ Loading({
 
 #### `props.error`
 
-A boolean prop passed to [`LoadingComponent`](#loadingcomponent) when the
-[`loader`](#optsloader) has failed.
+An `Error` object passed to [`LoadingComponent`](#loadingcomponent) when the
+[`loader`](#optsloader) has failed. When there is no error, `null` is
+passed.
 
 ```js
 function LoadingComponent(props) {
   if (props.error) {
     return <div>Error!</div>;
+  } else {
+    return <div>Loading...</div>;
+  }
+}
+```
+
+[Read more about errors](#loading-error-states).
+
+#### `props.retry`
+
+A function prop passed to [`LoadingComponent`](#loadingcomponent) when the
+[`loader`](#optsloader) has failed, used to retry loading the component.
+
+```js
+function LoadingComponent(props) {
+  if (props.error) {
+    return <div>Error! <button onClick={ props.retry }>Retry</button></div>;
   } else {
     return <div>Loading...</div>;
   }
@@ -1115,7 +1148,7 @@ export default function MyLoadable(opts) {
   return Loadable(Object.assign({
     loading: Loading,
     delay: 200,
-    timeout: 10,
+    timeout: 10000,
   }, opts));
 };
 ```
