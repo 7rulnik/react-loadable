@@ -1,10 +1,10 @@
 {
   "name": "@7rulnik/react-loadable",
-  "version": "5.3.4",
+  "version": "5.5.0",
   "description": "A higher order component for loading components with promises",
   "main": "lib/index.js",
   "author": "James Kyle <me@thejameskyle.com>",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "repository": "thejameskyle/react-loadable",
   "files": [
     "babel.js",
