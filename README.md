@@ -6,6 +6,8 @@
 
 It's a fork of react-loadable that works with webpack@4! You should not use it if you don't understand what is going on. You can track [original PR](https://github.com/jamiebuilds/react-loadable/pull/110) with this update.
 
+**UPDATE:** Unfortunately maintainers of react-loadable didn't find enough time for my and others PR's so I decided to close original PR. Also **7rulnik/react-loadable** is **deprecated**. Please use [loadable-components](https://github.com/smooth-code/loadable-components). It's [recommended aproach](https://reactjs.org/docs/code-splitting.html#reactlazy) by React maintainers.
+
 ## Install
 
 ```sh
